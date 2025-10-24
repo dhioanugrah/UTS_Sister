@@ -32,7 +32,7 @@ README.md           → panduan build/run & dokumentasi
 
 ### 1 Build & Run Container
 ```powershell
-cd D:\uts_aggregator_flask_json_v2
+cd D:\UTS_SISTER
 
 # Build image
 docker build -t uts-aggregator .
