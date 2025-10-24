@@ -114,52 +114,7 @@ Cakupan test:
 
 ---
 
-### 6️ (Opsional Bonus) Jalankan dengan Docker Compose
-#### File `docker-compose.yml`
-```yaml
-version: "3.9"
-services:
-  aggregator:
-    build: .
-    container_name: uts-agg
-    ports: ["8080:8080"]
-    volumes: [ "uts_dedup:/app/data" ]
-    environment: [ "DATA_DIR=/app/data" ]
-    healthcheck:
-      test: ["CMD","curl","-f","http://localhost:8080/stats"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-    restart: unless-stopped
 
-  publisher:
-    image: curlimages/curl:8.10.1
-    container_name: uts-pub
-    command: ["sleep","infinity"]
-    depends_on:
-      aggregator:
-        condition: service_healthy
-    restart: unless-stopped
-
-volumes:
-  uts_dedup:
-```
-
-#### Jalankan Compose
-```powershell
-docker compose up -d
-docker ps
-```
-
-#### Kirim Event dari Publisher
-```powershell
-docker exec -it uts-pub sh -lc "printf '%s\n' '{"topic":"orders","event_id":"evt-5001","timestamp":"2025-10-23T15:00:00Z","source":"pub","payload":{"x":1}}'  | curl -s -X POST http://aggregator:8080/publish -H 'Content-Type: application/json' --data-binary @-"
-
-curl.exe http://localhost:8080/stats
-curl.exe "http://localhost:8080/events?topic=orders"
-```
-
----
 
 ##  Asumsi Desain
 - Arsitektur **Publish–Subscribe** (Flask sebagai broker).  
@@ -188,7 +143,7 @@ Isi laporan:
 ---
 
 ##  Link Video Demo
- **YouTube:** (https://youtu.be/your-demo-link-here)
+ **YouTube:** (https://youtu.be/3LjFo_rq-nk)
 
 
 ---
