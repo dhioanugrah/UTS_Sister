@@ -1,0 +1,31 @@
+docker-compose.ymlversion: "3.9"
+
+services:
+  aggregator:
+    build: .
+    container_name: uts-agg
+    ports:
+      - "8080:8080"
+    volumes:
+      - uts_dedup:/app/data
+    environment:
+      - DATA_DIR=/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/stats"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  # Dummy publisher buat demo kirim event via jaringan internal
+  publisher:
+    image: curlimages/curl:8.10.1
+    container_name: uts-pub
+    command: ["sleep", "infinity"]
+    depends_on:
+      aggregator:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  uts_dedup:
